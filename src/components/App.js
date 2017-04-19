@@ -5,6 +5,7 @@ import Footer from './Footer'
 
 const App = () => (
   <div>
+    <City/>
     <Footer />
   </div>
 )
