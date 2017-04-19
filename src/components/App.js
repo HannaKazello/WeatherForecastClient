@@ -2,22 +2,47 @@ import React, {
     Component
 } from 'react';
 import Forecast from './Forecast'
+import ChooseCity from './ChooseCity'
+import EventEmitter from'wolfy87-eventemitter'
+window.ee = new EventEmitter();
 var forecst=[
     {
-        img: 'img1',
-        degree: 25
+        weather:[
+            {
+                icon: '02n'
+            }
+        ],
+        main:{
+            temp:'20'
+        }
     },
-    {
-        img: 'img2',
-        degree: 26
-    },
-    {
-        img: 'img3',
-        degree: 34
-    }
+
 
 ]
 class App extends Component {
+    constructor(props){
+    super(props);
+    this.state = {
+        forecast: forecst,
+        city:'hrodno'
+    };
+  }
+  componentDidMount=()=>{
+      var self = this;
+  window.ee.addListener('City.choose', function(item) {
+    self.setState({city: item});
+
+  });
+  window.ee.addListener('Forecast.update', function(item) {
+    self.setState({forecast: [item]});
+
+  });
+
+  }
+  componentWillUnmount=()=>{
+      window.ee.removeListener('City.choose');
+       window.ee.removeListener('Forecast.update');
+  }
     render() {
         return (
             <div className="App" >
@@ -25,7 +50,9 @@ class App extends Component {
                     <h2 > Welcome to weather app </h2>
                 </div>
                 <div className='app'>
-                    <Forecast data={forecst}/>
+                    <ChooseCity/>
+                    <div className='city' ref='cityLabel'>{this.state.city}</div>
+                    <Forecast data={this.state.forecast}/>
                 </div>
             </div>
         );

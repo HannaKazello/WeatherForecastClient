@@ -3,12 +3,16 @@ import React, {
 } from 'react';
 class DayWeather extends Component{
     render(){
-        return(
-            <div className="dayWeather">
-                <p className='img'> {this.props.data.img} </p>
-                <p className='degree'> {this.props.data.degree} </p>
-            </div>
-        )
+    
+            var icon = 'http://openweathermap.org/img/w/'+this.props.data.weather[0].icon+'.png';
+            return(
+                <div className="dayWeather">
+                    <img src={icon}/>
+                    <p className='degree'> {this.props.data.main.temp} </p>
+                </div>
+            )
+
+
     }
 }
 export default DayWeather
