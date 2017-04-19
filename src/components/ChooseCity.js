@@ -11,7 +11,8 @@ class ChooseCity extends Component{
     constructor(props){
     super(props);
     this.state = {
-        cityIsEmpty: true
+        cityIsEmpty: true,
+        querryType: 'current'
     };
   }
     componentDidMount=()=>{
@@ -21,7 +22,7 @@ class ChooseCity extends Component{
         e.preventDefault();
         var city = ReactDOM.findDOMNode(this.refs.input_city).value;
         window.ee.emit('City.choose', city);
-         query(city,function(err, result){
+         query(city,this.state.querryType, function(err, result){
             window.ee.emit('Forecast.update', result);
         });
 
