@@ -8,20 +8,26 @@ class Forecast extends Component {
 
         var data=this.props.data;
         var ForecastTemplate;
-        if(data.length>0){
-           ForecastTemplate=data.map(function(item, index) {
-               return (
+        if(data.list){
+            console.log('im in datalist');
+             ForecastTemplate=data.list.map(function(item,index){
+                return (
                    <div key={index}>
                        <DayWeather  data={item}/>
                    </div>
                )
-           })
+           });
         }
-        else {ForecastTemplate = <p>No forecast</p>}
+        else if(data){
+            console.log('im in data');
+             ForecastTemplate=<DayWeather  data={data}/>
+        }
+        else {
+            ForecastTemplate = <p>No forecast</p>
+        }
         return (
            <div className='forecast' >
                {ForecastTemplate}
-               <span className={data.length>0 ? " ": ".none"}>Count: {data.length}</span>
            </div>
          )
     }

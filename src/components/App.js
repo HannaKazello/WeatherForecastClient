@@ -1,58 +1,54 @@
-
-import React, {
-    Component
-} from 'react';
-import Forecast from './Forecast'
+import React, {Component} from 'react';
+import Forecast from './Forecast';
+import ErrorMessage from './ErrorMessage';
 import ChooseCity from './ChooseCity'
-import EventEmitter from'wolfy87-eventemitter'
-window.ee = new EventEmitter();
-var forecst=[
+var defForecast=
     {
         weather:[
             {
-                icon: '02n'
+                icon: ''
             }
         ],
         main:{
-            temp:'20'
+            temp:''
         }
-    },
-
-
-]
+    }
 class App extends Component {
     constructor(props){
     super(props);
     this.state = {
-        forecast: forecst,
-        city:'hrodno'
+        forecast: '',
+        city:'',
+        error:''
     };
   }
-  componentDidMount=()=>{
-      var self = this;
-  window.ee.addListener('City.choose', function(item) {
-    self.setState({city: item});
-
-  });
-  window.ee.addListener('Forecast.update', function(item) {
-    self.setState({forecast: [item]});
-
-  });
-
+  changeCity = (c) => {
+      this.setState({city: c});
   }
-  componentWillUnmount=()=>{
-      window.ee.removeListener('City.choose');
-       window.ee.removeListener('Forecast.update');
+  onQuerryTypeChange=(e)=>{
+      this.setState({querryType:e.currentTarget.value})
+  }
+  changeForecast = (f, callback) => {
+      if(f.cod!==200 && f.cod!=='200'){
+          console.log('im in if', f.cod);
+          this.setState({error: f.message, forecast: defForecast});
+      }
+      else{
+          console.log('im in else', f.cod)
+          this.setState({error: '',forecast: f});
+      }
+      callback(null);
   }
     render() {
         return (
             <div className="App" >
-                <div className="App-header" >
+                <div className="center" >
                     <h2 > Welcome to weather app </h2>
                 </div>
-                <div className='app'>
-                    <ChooseCity/>
-                    <div className='city' ref='cityLabel'>{this.state.city}</div>
+                <div className='center'>
+                    <ChooseCity changeCity={this.changeCity} changeForecast={this.changeForecast} />
+                    <ErrorMessage message={this.state.error}/>
+                    <div className='city'>{this.state.city}</div>
                     <Forecast data={this.state.forecast}/>
                 </div>
             </div>
