@@ -2,17 +2,6 @@ import React, {Component} from 'react';
 import Forecast from './Forecast';
 import ErrorMessage from './ErrorMessage';
 import ChooseCity from './ChooseCity'
-var defForecast=
-    {
-        weather:[
-            {
-                icon: ''
-            }
-        ],
-        main:{
-            temp:''
-        }
-    }
 class App extends Component {
     constructor(props){
     super(props);
@@ -31,7 +20,7 @@ class App extends Component {
   changeForecast = (f, callback) => {
       if(f.cod!==200 && f.cod!=='200'){
           console.log('im in if', f.cod);
-          this.setState({error: f.message, forecast: defForecast});
+          this.setState({error: f.message, forecast: ''});
       }
       else{
           console.log('im in else', f.cod)
